@@ -12,13 +12,10 @@ import edu.wpi.first.wpilibj.tables.TableKeyNotDefinedException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -64,10 +61,10 @@ public class DashGraph extends StaticWidget {
         robotTable = Robot.getTable();
         
 
-        clearButton = new JButton("clear graph");
+        clearButton = new JButton("Clear Graph");
         clearButton.addActionListener(new ClearListener());
 
-        enableButton = new JRadioButton("enable graph");
+        enableButton = new JRadioButton("Graph Enabled");
         enableButton.addActionListener(new EnableListener());
         enableButton.setSelected(true);
 
@@ -81,7 +78,6 @@ public class DashGraph extends StaticWidget {
         chartPanel.setVisible(true);
 
         holder = new JPanel();
-        //holder.setSize(600, 600);
         holder.setLayout(buildLayout(holder));
         
         robotTable.addTableListener(new TimeListener());
@@ -176,32 +172,5 @@ public class DashGraph extends StaticWidget {
                 }
             }
         }
-    }
-
-    public static void main(String[] args) {
-        DashGraph g = new DashGraph();
-        g.init();
-        g.showInWindow();
-
-        
-        int x = 0;
-        while (x < 5000) {
-            Robot.getTable().putNumber("Time", x);
-            Robot.getTable().putNumber("test", x);
-            x = x + 1;
-            try {
-                Thread.sleep(1);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(DashGraph.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        System.out.println("done");
-    }
-
-    public void showInWindow() {
-        JFrame f = new JFrame();
-        f.add(holder);
-        f.setSize(1000, 600);
-        f.setVisible(true);
     }
 }
