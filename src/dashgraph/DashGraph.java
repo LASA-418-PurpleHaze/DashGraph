@@ -8,7 +8,6 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.data.xy.XYSeriesCollection;
 import edu.wpi.first.wpilibj.tables.ITable;
 import edu.wpi.first.wpilibj.tables.ITableListener;
-import edu.wpi.first.wpilibj.tables.TableKeyNotDefinedException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
@@ -57,9 +56,8 @@ public class DashGraph extends StaticWidget {
         removeLabel = new JLabel("Remove a variable: ");
         removeVarField = new JTextField();
         removeVarField.addActionListener(new RemoveVarListener());
-        
+
         robotTable = Robot.getTable();
-        
 
         clearButton = new JButton("Clear Graph");
         clearButton.addActionListener(new ClearListener());
@@ -79,9 +77,9 @@ public class DashGraph extends StaticWidget {
 
         holder = new JPanel();
         holder.setLayout(buildLayout(holder));
-        
+
         robotTable.addTableListener(new TimeListener());
-        
+
         add(holder);
     }
 
@@ -129,15 +127,16 @@ public class DashGraph extends StaticWidget {
             String newVar = addVarField.getText();
             addVarField.setText("");
 
-            try {
-                robotTable.getNumber(newVar);
+            double result = robotTable.getNumber(newVar, Math.E * Math.PI);
 
-                if (!graphedVars.contains(newVar)) {
-                    graphedVars.add(newVar);
-                    data.addSeries(new XYSeries(newVar));
-                }
-            } catch (TableKeyNotDefinedException exception) {
-                System.out.println("Tried to add nonexistant key");
+            if (result == Math.E * Math.PI) {
+                System.out.println("Tried to add nonexistant key!");
+                return;
+            }
+
+            if (!graphedVars.contains(newVar)) {
+                graphedVars.add(newVar);
+                data.addSeries(new XYSeries(newVar));
             }
         }
     }
@@ -148,7 +147,7 @@ public class DashGraph extends StaticWidget {
         public void actionPerformed(ActionEvent e) {
             String removedVar = removeVarField.getText();
             removeVarField.setText("");
-            
+
             if (graphedVars.remove(removedVar)) {
                 System.out.println("Removed var");
                 data.removeSeries(data.getSeries(removedVar));
@@ -159,15 +158,16 @@ public class DashGraph extends StaticWidget {
     }
 
     private class TimeListener implements ITableListener {
-        
+
         @Override
         public void valueChanged(ITable source, String key, Object value, boolean isNew) {
             if (DashGraph.this.enabled && key.equals("Time")) {
                 for (String s : graphedVars) {
-                    try {
-                        data.getSeries(s).add((double) value, robotTable.getNumber(s));
-                    } catch (TableKeyNotDefinedException e) {
-                        System.out.println("Attempted to graph nonexistant key");
+                    double number = robotTable.getNumber(s, Math.E * Math.PI);
+                    if (number == Math.E * Math.PI) {
+                        System.out.println("Tried to graph nonexistant var");
+                    } else {
+                        data.getSeries(s).add((double) value, number);
                     }
                 }
             }
