@@ -3,7 +3,7 @@ FRC Smartdashboard extension with a better grapher.
 
 Instructions:
 
-1. Download the jar here: https://drive.google.com/file/d/0B5ZUvkPYhHyYTzR2X3QwLXdBT1E/view?usp=sharing
+1. Download the jar from the dist folder in this repository.
 
 2. Place this jar in C:/users/username/SmartDashboard/extensions
 

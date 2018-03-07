@@ -1,5 +1,6 @@
 #ant specific
-dist/
+dist/*
+!dist/DashGraph.jar
 build/
 sysProps.xml
 
