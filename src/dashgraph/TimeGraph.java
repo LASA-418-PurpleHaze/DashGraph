@@ -31,8 +31,7 @@ public class TimeGraph extends DashGraph {
 
         dashTable.addEntryListener((NetworkTable nt, String key, NetworkTableEntry nte, NetworkTableValue ntv, int i) -> {
             synchronized (lock) {
-                ((List<XYSeries>) data.getSeries()).stream().filter((XYSeries xy)
-                        -> nt.getEntry((String) xy.getKey()).exists()).forEachOrdered((XYSeries xy)
+                ((List<XYSeries>) data.getSeries()).stream().forEachOrdered((XYSeries xy)
                         -> xy.add(ntv.getDouble(), nt.getEntry((String) xy.getKey()).getDouble(0)));
             }
         }, EntryListenerFlags.kLocal | EntryListenerFlags.kUpdate);
