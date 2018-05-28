@@ -48,7 +48,8 @@ public abstract class DashGraph extends StaticWidget {
         enableButton.setFocusable(false);
         enableButton.addActionListener((ActionEvent e) -> {
             synchronized (lock) {
-                DashGraph.this.enabled = enableButton.isSelected();
+                enabled = enableButton.isSelected();
+                System.out.println(enabled ? "Enabled graph" : "Disabled graph");
             }
         });
         enableButton.setSelected(true);
